@@ -59,6 +59,17 @@ func KubeconfigPath(t *testing.T) string {
 	return kubeconfig
 }
 
+// LokocfgPath gives the LOKOCFG_LOCATION value.
+func LokocfgPath(t *testing.T) string {
+	lokocfg := os.ExpandEnv(os.Getenv("LOKOCFG_LOCATION"))
+
+	if lokocfg == "" {
+		t.Fatalf("env var LOKOCFG_LOCATION was not set")
+	}
+
+	return lokocfg
+}
+
 // Kubeconfig returns content of kubeconfig file defined with KUBECONFIG
 // environment variable.
 func Kubeconfig(t *testing.T) []byte {
