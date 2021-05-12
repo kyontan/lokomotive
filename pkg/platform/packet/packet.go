@@ -202,6 +202,22 @@ func (c *config) Apply(ex *terraform.Executor) error {
 	return c.terraformSmartApply(ex, c.DNS)
 }
 
+// ApplyWithoutParallel applies Terraform configuration without parallel execution.
+func (c *config) ApplyWithoutParallel(ex *terraform.Executor) error {
+	assetDir, err := homedir.Expand(c.AssetDir)
+	if err != nil {
+		return err
+	}
+
+	c.AssetDir = assetDir
+
+	if err := c.Initialize(ex); err != nil {
+		return err
+	}
+
+	return c.terraformSmartApply(ex, c.DNS, "-parallelism=1")
+}
+
 func (c *config) Destroy(ex *terraform.Executor) error {
 	if err := c.Initialize(ex); err != nil {
 		return err
